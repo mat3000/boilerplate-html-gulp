@@ -1,0 +1,17 @@
+.stitches-sprites(@x, @y, @width, @height, @scale:1) {
+	background-position: @x*@scale @y*@scale;
+	width: @width*@scale;
+	height: @height*@scale;
+	background-size : 82px*@scale 82px*@scale;
+	background-image: url(datas/img/sprites.png);
+	background-repeat: no-repeat;
+}
+
+.sprite-1(@scale:1) { .stitches-sprites(0px, 0px, 40px, 40px, @scale); }
+.sprite-2(@scale:1) { .stitches-sprites(-42px, 0px, 40px, 40px, @scale); }
+.sprite-3(@scale:1) { .stitches-sprites(0px, -42px, 40px, 40px, @scale); }
+
+
+.position-1(@scale:1) { background-position: 0px*@scale 0px*@scale; }
+.position-2(@scale:1) { background-position: -42px*@scale 0px*@scale; }
+.position-3(@scale:1) { background-position: 0px*@scale -42px*@scale; }
