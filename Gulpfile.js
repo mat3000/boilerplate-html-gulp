@@ -1,8 +1,4 @@
 
-let themeName = 'boilerplate';
-themeName = process.env.NODE_ENV ? themeName + '-dev' : themeName;
-
-
 if(process.env.npm_config_logs){
 	console.log('\x1b[41m\x1b[37m');
 	console.log('|-----------------------------------|');
@@ -107,12 +103,12 @@ gulp.task('less', () => {
 	        	autoprefixer({browsers: ['> 1%', 'IE 11', 'last 2 versions']})
 		    ]))
 		    .pipe(rename("./bundle.css"))
-		    .pipe(gulp.dest('./'+themeName+'/styles'))
+		    .pipe(gulp.dest('./dev/styles'))
 		    .pipe(livereload());
 
 	}else{
 
-		gulp.src('./'+themeName+'/styles/*.css', {read: false})
+		gulp.src('./dist/styles/*.css', {read: false})
 	        .pipe(clean());
 
 	 	return gulp.src('./src/styles/app.less')
@@ -122,7 +118,7 @@ gulp.task('less', () => {
 	        	autoprefixer({browsers: ['> 1%', 'last 2 versions']})
 		    ]))
 		    .pipe(mcss())
-		    .pipe(gulp.dest('./'+themeName+'/styles'));
+		    .pipe(gulp.dest('./dist/styles'));
 
 	}
 });
@@ -135,12 +131,12 @@ gulp.task('webpack', () => {
 	 	return gulp.src(['./src/js/app.js'])
 	 		.pipe(webpack(require('./webpack.config.js')))
 		    .pipe(rename("./bundle.js"))
-		    .pipe(gulp.dest('./'+themeName+'/js'))
+		    .pipe(gulp.dest('./dev/js'))
 		    .pipe(livereload());
 
 	}else{
 
-		gulp.src('./'+themeName+'/js/*.js', {read: false})
+		gulp.src('./dist/js/*.js', {read: false})
 	        .pipe(clean());
 
 	 	return gulp.src(['./src/js/app.js'])
@@ -160,7 +156,7 @@ gulp.task('webpack', () => {
 	 		}))
 		    // .pipe(uglify())
 		    .pipe(rename("./min-"+uniqid+".js"))
-		    .pipe(gulp.dest('./'+themeName+'/js'))
+		    .pipe(gulp.dest('./dist/js'))
 		    .pipe(livereload());
 
 
@@ -185,19 +181,19 @@ gulp.task('html', () => {
 	 	return gulp.src(['./src/**/*.html'])
 	 		.pipe(replace(/\{\@filename\@\}/g, 'bundle'))
 	 		.pipe(replace(/\<\!\-\- devtools \-\-\>/g, '<!-- devtools -->'+devtools+'<!-- !devtools -->'))
-		    .pipe(gulp.dest('./'+themeName+'/'))
+		    .pipe(gulp.dest('./dev/'))
 		    .pipe(livereload());
 	}else{
 
 		devtools += '<script type="text/javascript">(function(){var methods=[\'html\',\'show\',\'hide\',\'info\',\'loop\',\'red\',\'Red\',\'orange\',\'yellow\',\'green\',\'Green\',\'blue\',\'violet\',\'white\',\'grey\',\'black\',\'time\',\'size\',\'key\',\'button\',\'range\'];var length=methods.length;var console=(window.log=window.log||{});while(length--){if(!log[methods[length]])log[methods[length]]=function(){};}})();</script>'
 
-		gulp.src('./'+themeName+'/**/*.html', {read: false})
+		gulp.src('./dist/**/*.html', {read: false})
 	        .pipe(clean());
 
 	 	return gulp.src(['./src/**/*.html'])
 	 		.pipe(replace(/\{\@filename\@\}/g, 'min-'+uniqid))
 	 		.pipe(replace(/\<\!\-\- devtools \-\-\>/g, process.env.npm_config_logs ? '<!-- devtools -->'+devtools+'<!-- !devtools -->' : ''))
-		    .pipe(gulp.dest('./'+themeName+'/'));
+		    .pipe(gulp.dest('./dist/'));
 
 	}
 
@@ -210,15 +206,15 @@ gulp.task('medias', () => {
 	if(process.env.NODE_ENV){
 
 	  	gulp.src('./src/styles/datas')
-			.pipe(symlink('./'+themeName+'/styles/datas', {force: true}));
+			.pipe(symlink('./dev/styles/datas', {force: true}));
 
 	  	return gulp.src('./src/img')
-			.pipe(symlink('./'+themeName+'/img', {force: true}))
+			.pipe(symlink('./dev/img', {force: true}))
 
 	}else{
 
 	  	return gulp.src(['./src/**/*.jpg', './src/**/*.jpeg', './src/**/*.gif', './src/**/*.png', './src/**/*.woff', './src/**/*.woff2', './src/**/*.ttf', './src/**/*.svg', './src/**/*.eot', '!./src/styles/datas/img/sprites/*', '!./src/**/favicon.*'])
-		    .pipe(gulp.dest('./'+themeName+'/'));
+		    .pipe(gulp.dest('./dist/'));
 
 	}
 
@@ -229,7 +225,7 @@ gulp.task('medias', () => {
 gulp.task('webserver', function() {
 
 	if(process.env.NODE_ENV){
-		return gulp.src('./'+themeName)
+		return gulp.src('./dev')
 		    .pipe(webserver({
 				livereload: true,
 				directoryListing: false,
